@@ -12845,102 +12845,102 @@
     return Component;
   };
 
-  // node_modules/lucide-react/dist/esm/icons/copy.js
+  // node_modules/lucide-react/dist/esm/icons/external-link.js
   var __iconNode = [
-    ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-    ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
+    ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
+    ["path", { d: "M10 14 21 3", key: "gplh6r" }],
+    ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
   ];
-  var Copy = createLucideIcon("copy", __iconNode);
+  var ExternalLink = createLucideIcon("external-link", __iconNode);
 
-  // node_modules/lucide-react/dist/esm/icons/search.js
+  // node_modules/lucide-react/dist/esm/icons/play.js
   var __iconNode2 = [
-    ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
-    ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+    [
+      "path",
+      {
+        d: "M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z",
+        key: "10ikf1"
+      }
+    ]
   ];
-  var Search = createLucideIcon("search", __iconNode2);
+  var Play = createLucideIcon("play", __iconNode2);
+
+  // node_modules/lucide-react/dist/esm/icons/settings.js
+  var __iconNode3 = [
+    [
+      "path",
+      {
+        d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+        key: "1i5ecw"
+      }
+    ],
+    ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+  ];
+  var Settings = createLucideIcon("settings", __iconNode3);
 
   // extension/popup.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   function Popup() {
-    const [prompts, setPrompts] = (0, import_react3.useState)([]);
-    const [search, setSearch] = (0, import_react3.useState)("");
-    const [isAuthenticated, setIsAuthenticated] = (0, import_react3.useState)(false);
-    const [loading, setLoading] = (0, import_react3.useState)(true);
-    (0, import_react3.useEffect)(() => {
-      checkAuth();
-    }, []);
-    const checkAuth = async () => {
+    const [status, setStatus] = (0, import_react3.useState)({
+      text: 'Click "Activate" to use TeamPrompts on this page',
+      type: "idle"
+    });
+    const handleActivate = async () => {
       try {
-        const API_BASE = true ? "https://teamprompts.io" : "http://localhost:3000";
-        const res = await fetch(`${API_BASE}/api/prompts`);
-        if (res.ok) {
-          const data = await res.json();
-          setPrompts(data);
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (!tab.id) throw new Error("No active tab");
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ["content.js"]
+        });
+        setStatus({ text: "\u2713 TeamPrompts activated!", type: "success" });
       } catch (error) {
         console.error(error);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
+        setStatus({ text: "\u2717 Cannot activate on this page", type: "error" });
       }
     };
-    const filteredPrompts = prompts.filter(
-      (p) => p.title.toLowerCase().includes(search.toLowerCase()) || p.content.toLowerCase().includes(search.toLowerCase())
-    );
-    const handleCopy = (content) => {
-      navigator.clipboard.writeText(content);
+    const openDashboard = () => {
+      chrome.tabs.create({ url: "https://teamprompts.io/dashboard" });
     };
-    if (loading) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "p-4", children: "Loading..." });
-    if (!isAuthenticated) {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "p-4 w-80 flex flex-col items-center justify-center space-y-4", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { className: "text-lg font-bold", children: "TeamPrompts" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-sm text-center text-gray-500", children: "Please log in to access your prompts." }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "a",
-          {
-            href: "https://teamprompts.io/login",
-            target: "_blank",
-            rel: "noopener noreferrer",
-            className: "bg-black text-white px-4 py-2 rounded text-sm",
-            children: "Log In"
-          }
-        )
-      ] });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "w-80 h-96 flex flex-col bg-white", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "p-4 border-b", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "relative", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "absolute left-2 top-2.5 h-4 w-4 text-gray-500" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-          "input",
-          {
-            type: "text",
-            placeholder: "Search prompts...",
-            className: "w-full pl-8 pr-4 py-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-black",
-            value: search,
-            onChange: (e) => setSearch(e.target.value)
-          }
-        )
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex-1 overflow-y-auto p-2 space-y-2", children: [
-        filteredPrompts.map((prompt) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "p-3 border rounded-md hover:bg-gray-50 group", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-start justify-between", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { className: "font-medium text-sm", children: prompt.title }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-              "button",
-              {
-                onClick: () => handleCopy(prompt.content),
-                className: "text-gray-400 hover:text-black opacity-0 group-hover:opacity-100 transition-opacity",
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, { className: "h-4 w-4" })
-              }
-            )
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "text-xs text-gray-500 mt-1 line-clamp-2", children: prompt.content })
-        ] }, prompt.id)),
-        filteredPrompts.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "text-center py-8 text-gray-500 text-sm", children: "No prompts found." })
-      ] })
+    const openSettings = () => {
+      chrome.tabs.create({ url: "https://teamprompts.io/settings" });
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "w-[350px] p-4 font-sans", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { className: "text-lg font-bold mb-3 text-gray-800", children: "TeamPrompts" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `p-3 rounded-lg mb-4 text-sm ${status.type === "success" ? "bg-green-100 text-green-800" : status.type === "error" ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-600"}`, children: status.text }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        "button",
+        {
+          onClick: handleActivate,
+          className: "w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg mb-2 flex items-center justify-center gap-2 transition-colors",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, { className: "w-4 h-4" }),
+            "Activate on This Page"
+          ]
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        "button",
+        {
+          onClick: openDashboard,
+          className: "w-full py-3 px-4 bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-semibold rounded-lg mb-2 flex items-center justify-center gap-2 transition-colors",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4" }),
+            "Manage Prompts"
+          ]
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        "button",
+        {
+          onClick: openSettings,
+          className: "w-full py-3 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-lg flex items-center justify-center gap-2 transition-colors",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Settings, { className: "w-4 h-4" }),
+            "Settings"
+          ]
+        }
+      )
     ] });
   }
   var root = (0, import_client.createRoot)(document.getElementById("root"));
@@ -13007,8 +13007,9 @@ lucide-react/dist/esm/shared/src/utils.js:
 lucide-react/dist/esm/defaultAttributes.js:
 lucide-react/dist/esm/Icon.js:
 lucide-react/dist/esm/createLucideIcon.js:
-lucide-react/dist/esm/icons/copy.js:
-lucide-react/dist/esm/icons/search.js:
+lucide-react/dist/esm/icons/external-link.js:
+lucide-react/dist/esm/icons/play.js:
+lucide-react/dist/esm/icons/settings.js:
 lucide-react/dist/esm/lucide-react.js:
   (**
    * @license lucide-react v0.554.0 - ISC

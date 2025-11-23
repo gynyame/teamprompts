@@ -19,7 +19,16 @@ const iconsDir = path.join(outDir, 'icons')
 if (!fs.existsSync(iconsDir)) {
     fs.mkdirSync(iconsDir)
 }
-// We don't have icons yet, but let's handle it gracefully or create placeholders later
+
+// Copy icons
+const iconFiles = ['icon16.png', 'icon48.png', 'icon128.png']
+iconFiles.forEach(icon => {
+    const src = path.join(extensionDir, 'icons', icon)
+    const dest = path.join(iconsDir, icon)
+    if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest)
+    }
+})
 
 // Build
 esbuild.build({
