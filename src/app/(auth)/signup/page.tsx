@@ -30,8 +30,12 @@ export default function SignupPage() {
         const result = await signup(formData)
         if (result?.error) {
             toast.error(result.error)
-        } else {
+        } else if (result?.success) {
             toast.success('Check your email to confirm your account')
+            // Redirect to login after a short delay
+            setTimeout(() => {
+                window.location.href = '/login'
+            }, 2000)
         }
     }
 
