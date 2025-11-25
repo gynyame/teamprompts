@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend with a dummy key if missing to prevent build errors
+// The actual key is required for sending emails at runtime
+const resend = new Resend(process.env.RESEND_API_KEY || 're_123456789');
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL
     ? process.env.NEXT_PUBLIC_APP_URL
