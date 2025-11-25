@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
+import { sendInvitationEmail } from '@/lib/email'
 
 const inviteSchema = z.object({
     teamSlug: z.string(),
@@ -60,9 +61,19 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: error.message }, { status: 400 })
         }
 
-        // Mock email sending
-        console.log(`[MOCK EMAIL] To: ${email}, Subject: Join ${team.name} on TeamPrompts`)
-        console.log(`[MOCK EMAIL] Link: http://localhost:3000/invite/${invitation.token}`)
+        // Send email using Resend
+        const { error: emailError } = await sendInvitationEmail({
+            email,
+            teamName: team.name,
+            inviterName: user.user_metadata.full_name || user.email || 'A team member',
+            token: invitation.token,
+        })
+
+        if (emailError) {
+            console.error('Failed to send email:', emailError)
+            // We don't fail the request if email fails, but we log it.
+            // Ideally we might want to return a warning or retry.
+        }
 
         return NextResponse.json({ success: true })
     } catch (error: any) {
