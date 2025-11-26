@@ -25,9 +25,10 @@ import { cn } from '@/lib/utils'
 interface PromptEditorProps {
     form: UseFormReturn<PromptFormValues>
     className?: string
+    folders?: { id: string; name: string }[]
 }
 
-export function PromptEditor({ form, className }: PromptEditorProps) {
+export function PromptEditor({ form, className, folders = [] }: PromptEditorProps) {
     const content = form.watch('content')
 
     // Simple variable detection
@@ -88,6 +89,36 @@ export function PromptEditor({ form, className }: PromptEditorProps) {
                     )}
                 />
             </div>
+
+            <FormField
+                control={form.control}
+                name="folder_id"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Folder</FormLabel>
+                        <FormControl>
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value || undefined}
+                                value={field.value || undefined}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a folder (optional)" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="none">No Folder</SelectItem>
+                                    {folders.map(folder => (
+                                        <SelectItem key={folder.id} value={folder.id}>
+                                            {folder.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
 
             <FormField
                 control={form.control}

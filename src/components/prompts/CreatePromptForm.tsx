@@ -10,7 +10,7 @@ import { Form } from '@/components/ui/form'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-export function CreatePromptForm({ teamSlug }: { teamSlug: string }) {
+export function CreatePromptForm({ teamSlug, folders }: { teamSlug: string; folders: any[] }) {
     const router = useRouter()
     const form = useForm({
         resolver: zodResolver(promptSchema),
@@ -43,7 +43,7 @@ export function CreatePromptForm({ teamSlug }: { teamSlug: string }) {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     {/* @ts-ignore */}
-                    <PromptEditor form={form} />
+                    <PromptEditor form={form} folders={folders} />
                     <div className="flex justify-end space-x-4">
                         <Button variant="outline" type="button" onClick={() => router.back()}>
                             Cancel

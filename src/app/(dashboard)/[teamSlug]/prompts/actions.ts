@@ -31,7 +31,7 @@ export async function createPrompt(teamSlug: string, formData: any) {
         return { error: 'Invalid input', details: validated.error.flatten() }
     }
 
-    const { title, content, description, visibility, variables } = validated.data
+    const { title, content, description, visibility, variables, folder_id } = validated.data
 
     // Create prompt
     const { data: prompt, error: promptError } = await supabase
@@ -43,6 +43,7 @@ export async function createPrompt(teamSlug: string, formData: any) {
             content,
             description,
             visibility,
+            folder_id,
         })
         .select()
         .single()
