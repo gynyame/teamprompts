@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CopyButton } from '@/components/prompts/CopyButton'
+import { DeletePromptButton } from '@/components/prompts/DeletePromptButton'
 
 import { CommentSection } from '@/components/prompts/CommentSection'
 
@@ -60,6 +61,7 @@ export default async function PromptDetailPage({
                         <Button variant="outline">Edit</Button>
                     </Link>
                     <CopyButton content={prompt.content} promptId={prompt.id} />
+                    <DeletePromptButton teamSlug={teamSlug} promptId={prompt.id} />
                 </div>
             </div>
 
