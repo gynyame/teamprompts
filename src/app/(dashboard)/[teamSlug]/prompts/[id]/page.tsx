@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
@@ -55,7 +56,9 @@ export default async function PromptDetailPage({
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    <Button variant="outline">Edit</Button>
+                    <Link href={`/${teamSlug}/prompts/${prompt.id}/edit`}>
+                        <Button variant="outline">Edit</Button>
+                    </Link>
                     <CopyButton content={prompt.content} promptId={prompt.id} />
                 </div>
             </div>
